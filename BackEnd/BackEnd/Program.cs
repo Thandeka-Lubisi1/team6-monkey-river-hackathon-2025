@@ -106,12 +106,13 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 builder.Services.AddAuthorization();
 
-
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
 
 builder.Services.AddScoped<IEntityService<DiagnosticTest>, EntityService<DiagnosticTest>>();
 builder.Services.AddScoped<IEntityService<MonitoredDestination>, EntityService<MonitoredDestination>>();
+builder.Services.AddSingleton<IMongoDbContext, MongoDbContext>();
+builder.Services.AddSingleton<IJwtService, JwtService>();
 
 builder.Services.AddScoped<IRepository<DiagnosticTest>>(provider =>
 {
