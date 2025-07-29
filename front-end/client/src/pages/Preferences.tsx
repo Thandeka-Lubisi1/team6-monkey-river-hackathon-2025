@@ -1,15 +1,15 @@
-import { Link } from 'react-router-dom'
-"use client"
+import { Link } from 'react-router-dom';
+"use client";
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom';
 
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "@/components/ui/accordion"
-import { Button } from "@/components/ui/button"
+} from "@/components/ui/accordion";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardAction,
@@ -18,16 +18,11 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
-
-import { Label } from "@/components/ui/label"
-import ChangeUserName from '@/components/ui/preferenceforms/changeUserN';
-import ChangePassword from '@/components/ui/preferenceforms/changePassword';
-import ChangeEmail from '@/components/ui/preferenceforms/changeEmail';
-
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import { z } from "zod"
+} from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 
 import {
   Form,
@@ -37,9 +32,10 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-import { Switch } from '@/components/ui/switch'
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Switch } from '@/components/ui/switch';
+import { toast } from 'react-toastify'; // For showing success messages
 
 // Loading spinner component
 const LoadingSpinner = () => (
@@ -48,23 +44,24 @@ const LoadingSpinner = () => (
   </div>
 );
 
-// switch 
-const notificationFormSchema = z.object({
-  notification: z.boolean()
-})
-
-// user details
-const formUserDetailsSchema = z.object({
-  firstname: z.string().min(2, {
+// Zod schema for user details with preferences
+const userDetailsSchema = z.object({
+  firstName: z.string().min(2, {
     message: "First name must be at least 2 characters.",
   }),
-  lastname: z.string().min(2, {
+  lastName: z.string().min(2, {
     message: "Last name must be at least 2 characters.",
   }),
   email: z.string().email({
     message: "Please enter a valid email address.",
   }),
-})
+  preferences: z.object({
+    emailNotifications: z.boolean(),
+    theme: z.enum(['light', 'dark'], {
+      error: "Theme is required",
+    }),
+  }),
+});
 
 // password
 const passwordformSchema = z.object({
@@ -79,26 +76,24 @@ const passwordformSchema = z.object({
   path: ["rpassword"],
 })
 
-interface User {
-  firstName: string;
-  lastName: string;
-  email: string;
-}
+type UserDetails = z.infer<typeof userDetailsSchema>;
 
 export default function Preferences() {
-  // get user data
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<UserDetails | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
 
-  // Form refs
-  const userDetailsform = useForm<z.infer<typeof formUserDetailsSchema>>({
-    resolver: zodResolver(formUserDetailsSchema),
+  const form = useForm<UserDetails>({
+    resolver: zodResolver(userDetailsSchema),
     defaultValues: {
-      firstname: "",
-      lastname: "",
+      firstName: "",
+      lastName: "",
       email: "",
+      preferences: {
+        emailNotifications: true,
+        theme: "light",
+      },
     },
   });
 
@@ -110,29 +105,25 @@ export default function Preferences() {
     },
   });
 
-  const notificationForm = useForm<z.infer<typeof notificationFormSchema>>({
-    resolver: zodResolver(notificationFormSchema),
-    defaultValues: {
-      notification: true,
-    },
-  });
-
   useEffect(() => {
     loadUserData();
   }, []);
 
-  // Update form values when user data loads
   useEffect(() => {
     if (user) {
-      userDetailsform.reset({
-        firstname: user.firstName || "",
-        lastname: user.lastName || "",
+      form.reset({
+        firstName: user.firstName || "",
+        lastName: user.lastName || "",
         email: user.email || "",
+        preferences: {
+          emailNotifications: user.preferences?.emailNotifications || true,
+          theme: user.preferences?.theme || "light",
+        },
       });
     }
   }, [user]);
 
-  const loadUserData = () => {
+  const loadUserData = async () => {
     try {
       const userString = localStorage.getItem('user');
       if (userString) {
@@ -148,23 +139,48 @@ export default function Preferences() {
       setLoading(false);
     }
   };
-
-  // notification switch 
-  function notificationOnSubmit(data: z.infer<typeof notificationFormSchema>) {
-    console.log("Notification settings:", data);
-  }
-
-  // user details
-  function onUserDetailsSubmit(values: z.infer<typeof formUserDetailsSchema>) {
-    console.log("User details update:", values);
-    // TODO: Submit to backend
-  }
-
-  // change password
+    // change password
   function passwordOnSubmit(values: z.infer<typeof passwordformSchema>) {
     console.log("Password change:", values);
     // TODO: Submit to backend
   }
+
+
+  const onSubmit = async (data: UserDetails) => {
+    const baseUrl = import.meta.env.BACKEND_LINK;
+    try {
+       const token = localStorage.getItem('authToken');
+
+      if (!token) {
+        throw new Error("Authentication token not found. Please log in.");
+      }
+      const response = await fetch(`https://hackathonteam6api-gbabgfcsg2cngygr.canadacentral-01.azurewebsites.net/api/v1/Profile`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const result = await response.json();
+      console.log("Update successful:", result);
+
+      // Update local storage with new user data
+      localStorage.setItem('user', JSON.stringify(data));
+      setUser(data);
+
+      // Show success notification
+      toast.success("Your profile has been updated successfully!");
+    } catch (error) {
+      console.error("Error updating profile:", error);
+      toast.error("Failed to update your profile. Please try again.");
+    }
+  };
 
   // Show loading spinner while fetching data
   if (loading) {
@@ -192,19 +208,21 @@ export default function Preferences() {
   return (
     <div className='w-full flex flex-col gap-6 p-6'>
       <h1 className="text-2xl font-bold">Preferences</h1>
-     
+
       <Card className="w-full max-w-2xl">
         <CardHeader>
-          <CardTitle>Change User Details</CardTitle>
-          <CardDescription>Update your personal information</CardDescription>
+          <CardTitle>Update Your Profile</CardTitle>
+          <CardDescription>
+            Edit your personal information, notification settings, and theme.
+          </CardDescription>
         </CardHeader>
         <CardContent>
-          <Form {...userDetailsform}>
-            <form onSubmit={userDetailsform.handleSubmit(onUserDetailsSubmit)} className="space-y-6">
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <FormField
-                  control={userDetailsform.control}
-                  name="firstname"
+                  control={form.control}
+                  name="firstName"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>First Name</FormLabel>
@@ -215,10 +233,9 @@ export default function Preferences() {
                     </FormItem>
                   )}
                 />
-                
                 <FormField
-                  control={userDetailsform.control}
-                  name="lastname"
+                  control={form.control}
+                  name="lastName"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Last Name</FormLabel>
@@ -230,9 +247,8 @@ export default function Preferences() {
                   )}
                 />
               </div>
-              
               <FormField
-                control={userDetailsform.control}
+                control={form.control}
                 name="email"
                 render={({ field }) => (
                   <FormItem>
@@ -244,12 +260,56 @@ export default function Preferences() {
                   </FormItem>
                 )}
               />
-              
-              <Button type="submit">Update Details</Button>
+
+              {/* Email Notifications */}
+              <FormField
+                control={form.control}
+                name="preferences.emailNotifications"
+                render={({ field }) => (
+                  <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+                    <div className="space-y-0.5">
+                      <FormLabel className="text-base">Email Notifications</FormLabel>
+                      <FormDescription>
+                        Receive emails about your account activity.
+                      </FormDescription>
+                    </div>
+                    <FormControl>
+                      <Switch
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+
+              {/* Theme Selection */}
+              <FormField
+                control={form.control}
+                name="preferences.theme"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Theme</FormLabel>
+                    <FormControl>
+                      <select
+                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        {...field}
+                      >
+                        <option value="light">Light</option>
+                        <option value="dark">Dark</option>
+                      </select>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <Button type="submit">Save Changes</Button>
             </form>
           </Form>
         </CardContent>
       </Card>
+
 
       <Card className="w-full max-w-2xl">
         <CardHeader>
@@ -292,44 +352,6 @@ export default function Preferences() {
           </Form>
         </CardContent>
       </Card>
-
-      {/* Preferences notifications and theme */}
-      <Card className="w-full max-w-2xl">
-        <CardHeader>
-          <CardTitle>Preferences</CardTitle>
-          <CardDescription>Manage your notification settings</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Form {...notificationForm}>
-            <form onSubmit={notificationForm.handleSubmit(notificationOnSubmit)} className="w-full space-y-6">
-              <div className="space-y-4">
-                <FormField
-                  control={notificationForm.control}
-                  name="notification"
-                  render={({ field }) => (
-                    <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
-                      <div className="space-y-0.5">
-                        <FormLabel className="text-base">Email Notifications</FormLabel>
-                        <FormDescription>
-                          Receive emails about your account activity.
-                        </FormDescription>
-                      </div>
-                      <FormControl>
-                        <Switch
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                        />
-                      </FormControl>
-                    </FormItem>
-                  )}
-                />
-              </div>
-              
-              <Button type="submit">Save Preferences</Button>
-            </form>
-          </Form>
-        </CardContent>
-      </Card>
     </div>
-  )
+  );
 }

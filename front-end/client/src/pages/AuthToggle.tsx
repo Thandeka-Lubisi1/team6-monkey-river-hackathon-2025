@@ -2,7 +2,7 @@ import React, { useState, useRef, type FormEvent } from "react";
 import "../style/AuthToggle.css";
 import { useNavigate } from 'react-router-dom'
 
-const backend = process.env.BACKEND_LINK;
+const backend = import.meta.env.BACKEND_LINK;
 
 interface FormState {
   firstName: string;
