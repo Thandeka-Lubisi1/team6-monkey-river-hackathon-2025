@@ -52,7 +52,7 @@ export default function ChangeEmail() {
             </FormItem>
           )}
         />
-        <Button type="submit">Submit</Button>
+       
       </form>
     </Form>
   )
