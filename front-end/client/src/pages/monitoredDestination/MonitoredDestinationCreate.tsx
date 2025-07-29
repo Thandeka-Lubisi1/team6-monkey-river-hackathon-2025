@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Navbar from "@/components/common/navbar";
+import Navbar from "@/components/common/Navbar";
 import { Button } from '@/components/ui/button';
 
 interface MonitoredDestinationRequest {

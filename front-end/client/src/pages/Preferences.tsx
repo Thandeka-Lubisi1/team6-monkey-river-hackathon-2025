@@ -1,25 +1,16 @@
-import { Link } from 'react-router-dom';
 "use client";
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import {
   Card,
-  CardAction,
+
   CardContent,
   CardDescription,
-  CardFooter,
+
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -35,8 +26,8 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Switch } from '@/components/ui/switch';
-import { toast } from 'react-toastify'; // For showing success messages
-import Navbar from '@/components/common/navbar';
+import { toast } from 'react-toastify'; 
+import Navbar from '@/components/common/Navbar';
 
 // Loading spinner component
 const LoadingSpinner = () => (
@@ -190,7 +181,6 @@ export default function Preferences() {
 
 
   const onSubmit = async (data: UserDetails) => {
-    const baseUrl = import.meta.env.BACKEND_LINK;
     try {
        const token = localStorage.getItem('authToken');
 

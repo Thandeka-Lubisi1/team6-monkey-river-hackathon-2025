@@ -1,8 +1,6 @@
-import { useState } from 'react'
 import './App.css'
 import AppRoutes from './routes/AppRoutes'
-import { Button } from "@/components/ui/button"
-import { Link, BrowserRouter as Router } from 'react-router-dom';
+import {  BrowserRouter as Router } from 'react-router-dom';
 
 function App() {
 

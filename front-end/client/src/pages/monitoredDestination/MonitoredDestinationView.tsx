@@ -1,7 +1,7 @@
-import Navbar from "@/components/common/navbar";
-import React, { useState, useEffect } from "react";
+import Navbar from "@/components/common/Navbar";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Plus, Edit, Trash2, RefreshCw } from "lucide-react";
+import { Edit, Trash2, RefreshCw } from "lucide-react";
 import { Link } from "react-router-dom";
 
 // ---------- Types ----------
