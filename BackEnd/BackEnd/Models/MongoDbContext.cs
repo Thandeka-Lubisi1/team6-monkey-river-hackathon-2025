@@ -14,6 +14,13 @@ namespace BackEnd.Models
             _database = client.GetDatabase(settings.Value.DatabaseName);
         }
 
+        public IMongoDatabase Database => _database;
+        public IMongoCollection<DiagnosticTest> DiagnosticTests => _database.GetCollection<DiagnosticTest>("DiagnosticTests");
+        public IMongoCollection<MonitoredDestination> MonitoredDestinations => _database.GetCollection<MonitoredDestination>("MonitoredDestinations");
+        public IMongoCollection<User> Users()
+        {
+            return _database.GetCollection<User>("users");
+        }
         public async Task<bool> PingAsync()
         {
             try
@@ -25,11 +32,6 @@ namespace BackEnd.Models
             {
                 return false;
             }
-        }
-
-        public IMongoCollection<User> Users()
-        {
-            return _database.GetCollection<User>("users");
         }
     }
 }
