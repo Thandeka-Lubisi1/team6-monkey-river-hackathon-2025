@@ -65,16 +65,19 @@ const userDetailsSchema = z.object({
 
 // password
 const passwordformSchema = z.object({
-  password: z.string().min(8, {
-    message: "Password must be at least 8 characters.",
+  currentPassword: z.string().min(8, {
+    message: "Current password must be at least 8 characters.",
   }),
-  rpassword: z.string().min(8, {
-    message: "Please confirm your password.",
+  newPassword: z.string().min(8, {
+    message: "New password must be at least 8 characters.",
   }),
-}).refine((data) => data.password === data.rpassword, {
+  confirmPassword: z.string().min(8, {
+    message: "Confirm password must be at least 8 characters.",
+  }),
+}).refine((data) => data.newPassword === data.confirmPassword, {
   message: "Passwords don't match",
-  path: ["rpassword"],
-})
+  path: ["confirmPassword"],
+});
 
 type UserDetails = z.infer<typeof userDetailsSchema>;
 
@@ -97,11 +100,12 @@ export default function Preferences() {
     },
   });
 
-  const passwordform = useForm<z.infer<typeof passwordformSchema>>({
+  const passwordForm = useForm<z.infer<typeof passwordformSchema>>({
     resolver: zodResolver(passwordformSchema),
     defaultValues: {
-      password: "",
-      rpassword: "",
+      currentPassword: "",
+      newPassword: "",
+      confirmPassword: "",
     },
   });
 
@@ -140,10 +144,42 @@ export default function Preferences() {
     }
   };
     // change password
-  function passwordOnSubmit(values: z.infer<typeof passwordformSchema>) {
-    console.log("Password change:", values);
-    // TODO: Submit to backend
-  }
+ const onSubmitPasswordChange = async (data: z.infer<typeof passwordformSchema>) => {
+    try {
+      const token = localStorage.getItem('authToken');
+      if (!token) {
+        throw new Error("Authentication token not found. Please log in.");
+      }
+
+      const response = await fetch(
+        'https://hackathonteam6api-gbabgfcsg2cngygr.canadacentral-01.azurewebsites.net/api/v1/Profile/password',
+        {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            currentPassword: data.currentPassword,
+            newPassword: data.newPassword,
+          }),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const result = await response.json();
+      console.log("Password changed successfully:", result);
+
+      // Show success notification
+      toast.success("Your password has been updated successfully!");
+    } catch (error) {
+      console.error("Error changing password:", error);
+      toast.error("Failed to change your password. Please try again.");
+    }
+  };
 
 
   const onSubmit = async (data: UserDetails) => {
@@ -317,11 +353,24 @@ export default function Preferences() {
           <CardDescription>Update your account password</CardDescription>
         </CardHeader>
         <CardContent>
-          <Form {...passwordform}>
-            <form onSubmit={passwordform.handleSubmit(passwordOnSubmit)} className="space-y-6">
+          <Form {...passwordForm}>
+            <form onSubmit={passwordForm.handleSubmit(onSubmitPasswordChange)} className="space-y-6">
               <FormField
-                control={passwordform.control}
-                name="password"
+                control={passwordForm.control}
+                name="currentPassword"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Current Password</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Current password" type="password" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={passwordForm.control}
+                name="newPassword"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>New Password</FormLabel>
@@ -332,13 +381,12 @@ export default function Preferences() {
                   </FormItem>
                 )}
               />
-
               <FormField
-                control={passwordform.control}
-                name="rpassword"
+                control={passwordForm.control}
+                name="confirmPassword"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Confirm Password</FormLabel>
+                    <FormLabel>Confirm New Password</FormLabel>
                     <FormControl>
                       <Input placeholder="Confirm new password" type="password" {...field} />
                     </FormControl>
@@ -346,6 +394,7 @@ export default function Preferences() {
                   </FormItem>
                 )}
               />
+              
               
               <Button type="submit">Change Password</Button>
             </form>
