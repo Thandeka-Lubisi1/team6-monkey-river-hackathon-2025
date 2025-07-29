@@ -1,5 +1,6 @@
 import React, { useState, useRef, type FormEvent } from "react";
 import "../style/AuthToggle.css";
+import { useNavigate } from 'react-router-dom'
 
 interface FormState {
   firstName: string;
@@ -30,6 +31,7 @@ function AuthToggle() {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showConfirm, setShowConfirm] = useState<boolean>(false);
   const eyeRefs = [useRef<HTMLDivElement>(null), useRef<HTMLDivElement>(null)];
+    const navigate = useNavigate();
 
   const handleToggle = () => {
     setIsRegister((prev) => !prev);
@@ -87,7 +89,8 @@ function AuthToggle() {
         if (response.ok) {
           console.log("Registration successful", data);
           // Handle successful registration (e.g., show success message, redirect)
-          alert("Registration successful! Please check your email to verify your account.");
+          alert("Registration successful! Please go and log in");
+          setIsRegister(false);
         } else {
           // Handle server validation errors
           // setErrors({
@@ -117,7 +120,22 @@ function AuthToggle() {
       console.log("Login response:", data);
 
       if (response.ok) {
+
         console.log("Login successful", data);
+        // Storing token in localStorage
+        if (data.token) {
+          localStorage.setItem('authToken', data.token);
+          // as well user info
+          localStorage.setItem('user', JSON.stringify({
+            email: data.email,
+            firstName: data.firstName,
+            lastName: data.lastName
+          }));
+          
+          // Redirect to dashboard
+          navigate('/dashboard', { replace: true })
+         
+        }
       } else {
         console.log("Login unsuccessful", data);
         

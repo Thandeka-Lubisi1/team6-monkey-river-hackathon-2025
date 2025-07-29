@@ -1,6 +1,7 @@
 import { Routes, Route } from 'react-router-dom'
 import Home from '../pages/Home'
 import Preferences from '@/pages/Preferences';
+import Dashboard from '@/pages/Dashboard';
 // import About from '../pages/About'
 // import Contact from '../pages/Contact'
 // import NotFound from '../pages/NotFound'
@@ -10,6 +11,7 @@ const AppRoutes = () => {
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/preference" element={<Preferences />} />
+      <Route path="/dashboard" element={<Dashboard />} />
       {/* <Route path="/contact" element={<Contact />} />
       <Route path="*" element={<NotFound />} /> */}
     </Routes>
