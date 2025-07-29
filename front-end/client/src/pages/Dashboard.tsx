@@ -18,7 +18,7 @@ const Dashboard: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-      const navigate = useNavigate();
+  const navigate = useNavigate();
   
 
   useEffect(() => {
@@ -44,12 +44,19 @@ const Dashboard: React.FC = () => {
   };
 
   const handleLogout = () => {
-    // Remove auth token and user data from localStorage
+    try {
+         // Remove auth token and user data from localStorage
     localStorage.removeItem('authToken');
     localStorage.removeItem('user');
     
     // Redirect to login page
           navigate('/', { replace: true })
+        console.log("log out success")
+
+    } catch (e) {
+        console.log("error logging out", e)
+    }
+   
 
   };
 

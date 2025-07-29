@@ -32,6 +32,7 @@ function AuthToggle() {
   const [showConfirm, setShowConfirm] = useState<boolean>(false);
   const eyeRefs = [useRef<HTMLDivElement>(null), useRef<HTMLDivElement>(null)];
     const navigate = useNavigate();
+// show loading spinner
 
   const handleToggle = () => {
     setIsRegister((prev) => !prev);
@@ -71,7 +72,7 @@ function AuthToggle() {
       
     console.log( "Registering", form);
        // Registration request
-        const response = await fetch('http://localhost:5279/api/v1/Auth/register', {
+        const response = await fetch('https://hackathonteam6api-gbabgfcsg2cngygr.canadacentral-01.azurewebsites.net/api/v1/Auth/register', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -105,7 +106,7 @@ function AuthToggle() {
 
     } else {
     console.log("Logging in", form);
-       const response = await fetch('http://localhost:5279/api/v1/Auth/login', {
+       const response = await fetch('https://hackathonteam6api-gbabgfcsg2cngygr.canadacentral-01.azurewebsites.net/api/v1/Auth/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
