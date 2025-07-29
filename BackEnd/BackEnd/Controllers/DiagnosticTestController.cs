@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace BackEnd.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     [Authorize]
     public class DiagnosticTestController : ControllerBase
     {

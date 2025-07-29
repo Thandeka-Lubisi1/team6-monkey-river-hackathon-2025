@@ -17,6 +17,8 @@ namespace BackEnd.Models
         public IMongoDatabase Database => _database;
         public IMongoCollection<DiagnosticTest> DiagnosticTests => _database.GetCollection<DiagnosticTest>("DiagnosticTests");
         public IMongoCollection<MonitoredDestination> MonitoredDestinations => _database.GetCollection<MonitoredDestination>("MonitoredDestinations");
+        public IMongoCollection<TravelAlert> TravelAlerts => _database.GetCollection<TravelAlert>("travelAlerts");
+
         public IMongoCollection<User> Users()
         {
             return _database.GetCollection<User>("users");

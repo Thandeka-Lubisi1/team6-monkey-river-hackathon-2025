@@ -15,6 +15,17 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddControllers();
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", builder =>
+    {
+        builder
+            .AllowAnyOrigin()       
+            .AllowAnyMethod()       
+            .AllowAnyHeader();      
+    });
+});
 builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddSwaggerGen(c =>
@@ -60,6 +71,8 @@ builder.Services.AddSingleton<MongoDbContext>();
 
 
 builder.Services.AddScoped<JwtService>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<ITravelAlertService, TravelAlertService>();
 
 var jwtKey = Environment.GetEnvironmentVariable("JWT_SECRET_KEY")
              ?? builder.Configuration["Jwt:Key"];
@@ -136,6 +149,7 @@ app.UseSwagger();
 app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
+app.UseCors("AllowAll");
 
 app.Use(async (context, next) =>
 {
