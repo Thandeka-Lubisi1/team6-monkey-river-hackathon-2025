@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BackEnd.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     [ApiController]
     [Authorize]
     public class MonitoredDestinationController : ControllerBase
