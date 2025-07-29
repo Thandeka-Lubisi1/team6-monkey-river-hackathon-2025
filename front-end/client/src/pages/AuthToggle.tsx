@@ -102,6 +102,27 @@ function AuthToggle() {
 
     } else {
     console.log("Logging in", form);
+       const response = await fetch('http://localhost:5279/api/v1/Auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: form.email,
+          password: form.password,
+        }),
+      });
+
+      const data = await response.json();
+      console.log("Login response:", data);
+
+      if (response.ok) {
+        console.log("Login successful", data);
+      } else {
+        console.log("Login unsuccessful", data);
+        
+      }
+    
 
     }
   };
