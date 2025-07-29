@@ -20,10 +20,6 @@ namespace BackEnd.Models
         public IMongoCollection<TravelAlert> TravelAlerts => _database.GetCollection<TravelAlert>("travelAlerts");
         public IMongoCollection<User> Users => _database.GetCollection<User>("users");
 
-        /*public IMongoCollection<User> Users()
-        {
-            return _database.GetCollection<User>("users");
-        }*/
         public async Task<bool> PingAsync()
         {
             try
