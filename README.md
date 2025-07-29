@@ -66,3 +66,11 @@ cd team6-monkey-river-hackathon-2025/backend
 # Restore dependencies and run the project
 dotnet restore
 dotnet run
+
+# Navigate to frontend folder
+cd ../front-end/client
+
+# Install dependencies and start development server
+npm install
+npm run dev
+
