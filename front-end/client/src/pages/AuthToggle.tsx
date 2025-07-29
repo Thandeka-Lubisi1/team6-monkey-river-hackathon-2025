@@ -74,7 +74,7 @@ function AuthToggle() {
       
     console.log( "Registering", form);
        // Registration request
-        const response = await fetch(`${backend}/api/v1/Auth/register`, {
+        const response = await fetch(`https://hackathonteam6api-gbabgfcsg2cngygr.canadacentral-01.azurewebsites.net/api/v1/Auth/register`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -108,7 +108,7 @@ function AuthToggle() {
 
     } else {
     console.log("Logging in", form);
-       const response = await fetch(`${backend}/api/v1/Auth/login`, {
+       const response = await fetch(`https://hackathonteam6api-gbabgfcsg2cngygr.canadacentral-01.azurewebsites.net/api/v1/Auth/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
