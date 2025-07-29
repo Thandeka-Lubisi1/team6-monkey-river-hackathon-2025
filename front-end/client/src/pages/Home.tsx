@@ -1,5 +1,4 @@
-import { Link } from 'react-router-dom'
-import React, { useEffect, useState } from 'react';
+import  { useEffect, useState } from 'react';
 import AppToggle from "../pages/AuthToggle"
 import Dashboard from '../pages/Dashboard';
 import { isAuthenticated } from '../utils/auth'; 

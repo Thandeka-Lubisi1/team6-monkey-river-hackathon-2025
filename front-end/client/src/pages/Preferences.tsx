@@ -1,25 +1,16 @@
-import { Link } from 'react-router-dom';
 "use client";
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import {
   Card,
-  CardAction,
+
   CardContent,
   CardDescription,
-  CardFooter,
+
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -35,7 +26,8 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Switch } from '@/components/ui/switch';
-import { toast } from 'react-toastify'; // For showing success messages
+import { toast } from 'react-toastify'; 
+import Navbar from '@/components/common/Navbar';
 
 // Loading spinner component
 const LoadingSpinner = () => (
@@ -43,6 +35,7 @@ const LoadingSpinner = () => (
     <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
   </div>
 );
+
 
 // Zod schema for user details with preferences
 const userDetailsSchema = z.object({
@@ -175,6 +168,11 @@ export default function Preferences() {
 
       // Show success notification
       toast.success("Your password has been updated successfully!");
+      // clear the form 
+      passwordForm.reset;
+      // redirect
+      navigate('/dashboard', { replace: true })
+
     } catch (error) {
       console.error("Error changing password:", error);
       toast.error("Failed to change your password. Please try again.");
@@ -183,7 +181,6 @@ export default function Preferences() {
 
 
   const onSubmit = async (data: UserDetails) => {
-    const baseUrl = import.meta.env.BACKEND_LINK;
     try {
        const token = localStorage.getItem('authToken');
 
@@ -212,6 +209,12 @@ export default function Preferences() {
 
       // Show success notification
       toast.success("Your profile has been updated successfully!");
+      // clear the form
+      form.reset;
+      // redirect home
+      navigate('/dashboard', { replace: true })
+
+      
     } catch (error) {
       console.error("Error updating profile:", error);
       toast.error("Failed to update your profile. Please try again.");
@@ -243,7 +246,9 @@ export default function Preferences() {
 
   return (
     <div className='w-full flex flex-col gap-6 p-6'>
+       <Navbar/>
       <h1 className="text-2xl font-bold">Preferences</h1>
+     
 
       <Card className="w-full max-w-2xl">
         <CardHeader>
