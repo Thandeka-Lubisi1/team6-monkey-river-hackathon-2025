@@ -1,29 +1,47 @@
-# 🏞️ Team 6 - Monkey & River Hackathon 2025
+# 🏞️ Team 6 – Monkey & River Hackathon 2025
 
-## 🚀 ASP.NET Core API with MongoDB
-
-This is the backend API for **Travel Risk Monitoring** — our submission for the Monkey & River Hackathon 2025.  
-It is built with **ASP.NET Core**, integrated with **MongoDB Atlas**, and secured with **JWT Authentication**.
+Welcome to our submission for the **Monkey & River Hackathon 2025**.  
+This project is a **Travel Risk Monitoring Platform** powered by **ASP.NET Core 8**, **MongoDB Atlas**, and **JWT Authentication**, built to monitor global travel alerts in real time.
 
 ---
 
-## ✨ Features
+## 🧪 Test Case Screenshots
 
-✅ ASP.NET Core 8 Web API  
-✅ JWT Authentication (Login & Register)  
-✅ MongoDB Atlas Integration  
-✅ Protected Routes  
-✅ Health Check Endpoint (`/api/health`)  
-✅ Modular Service Layer  
-✅ Unit Tests with xUnit & Moq  
-✅ Swagger API Documentation
+### 🔐 Login & Dashboard Test
+
+This screenshot shows a successful login followed by dashboard rendering during automated test execution.
+
+![Login Test Screenshot](https://i.ibb.co/BV1GYzn9/image.png)
+
+### 📊 Travel Alerts Test
+
+This screenshot confirms travel alerts are correctly fetched and displayed in the UI during test validation.
+
+![Travel Alerts Test Screenshot](https://i.ibb.co/svGtHBnf/screenshot.png)
 
 ---
-## 🌐 Website 
-👉 https://hackathon-group-6.netlify.app/
-## 🌐 Swagger Endpoint
 
-📄 **Swagger UI**:  
+## 🚀 Backend: ASP.NET Core API with MongoDB
+
+### ✨ Features
+
+- ✅ **ASP.NET Core 8 Web API**
+- ✅ **JWT Authentication** (Register & Login)
+- ✅ **MongoDB Atlas Integration**
+- ✅ **Role-Based Protected Routes**
+- ✅ **Swagger API Documentation**
+- ✅ **Health Check Endpoint** (`/api/health`)
+- ✅ **Modular Service & Repository Layers**
+- ✅ **Unit Tests** with xUnit & Moq
+
+---
+
+## 🌐 Live Links
+
+🔗 **Frontend Website**:  
+👉 [https://hackathon-group-6.netlify.app](https://hackathon-group-6.netlify.app)
+
+📄 **Swagger API Docs**:  
 👉 [https://hackathonteam6api-gbabgfcsg2cngygr.canadacentral-01.azurewebsites.net/swagger/index.html](https://hackathonteam6api-gbabgfcsg2cngygr.canadacentral-01.azurewebsites.net/swagger/index.html)
 
 ---
@@ -31,18 +49,20 @@ It is built with **ASP.NET Core**, integrated with **MongoDB Atlas**, and secure
 ## 🛠 Getting Started
 
 ### ✅ Prerequisites
-- [.NET SDK 8+](https://dotnet.microsoft.com/en-us/download)  
-- [MongoDB Atlas](https://www.mongodb.com/atlas/database) account **or** local MongoDB instance  
+
+- [.NET SDK 8+](https://dotnet.microsoft.com/en-us/download)
+- [MongoDB Atlas](https://www.mongodb.com/atlas/database) account **or** local MongoDB instance
+- Node.js (for frontend)
 
 ---
 
-### 📂 Setup & Configuration
+### 📦 Backend Setup
 
-1️⃣ **Clone the repository**
 ```bash
+# Clone the repository
 git clone https://github.com/Thandeka-Lubisi1/team6-monkey-river-hackathon-2025.git
 cd team6-monkey-river-hackathon-2025/backend
-```
-2️⃣ **cd to front-end/client**
 
-run : npm run dev
+# Restore dependencies and run the project
+dotnet restore
+dotnet run
