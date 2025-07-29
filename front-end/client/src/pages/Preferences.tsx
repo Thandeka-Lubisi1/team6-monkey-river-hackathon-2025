@@ -36,6 +36,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Switch } from '@/components/ui/switch';
 import { toast } from 'react-toastify'; // For showing success messages
+import Navbar from '@/components/common/navbar';
 
 // Loading spinner component
 const LoadingSpinner = () => (
@@ -43,6 +44,7 @@ const LoadingSpinner = () => (
     <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
   </div>
 );
+
 
 // Zod schema for user details with preferences
 const userDetailsSchema = z.object({
@@ -175,6 +177,11 @@ export default function Preferences() {
 
       // Show success notification
       toast.success("Your password has been updated successfully!");
+      // clear the form 
+      passwordForm.reset;
+      // redirect
+      navigate('/dashboard', { replace: true })
+
     } catch (error) {
       console.error("Error changing password:", error);
       toast.error("Failed to change your password. Please try again.");
@@ -212,6 +219,12 @@ export default function Preferences() {
 
       // Show success notification
       toast.success("Your profile has been updated successfully!");
+      // clear the form
+      form.reset;
+      // redirect home
+      navigate('/dashboard', { replace: true })
+
+      
     } catch (error) {
       console.error("Error updating profile:", error);
       toast.error("Failed to update your profile. Please try again.");
@@ -243,7 +256,9 @@ export default function Preferences() {
 
   return (
     <div className='w-full flex flex-col gap-6 p-6'>
+       <Navbar/>
       <h1 className="text-2xl font-bold">Preferences</h1>
+     
 
       <Card className="w-full max-w-2xl">
         <CardHeader>

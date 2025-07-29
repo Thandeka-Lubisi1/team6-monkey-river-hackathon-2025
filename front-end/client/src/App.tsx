@@ -8,7 +8,7 @@ function App() {
 
   return (
     <>
-      <div className="flex min-h-svh flex-col items-center justify-center gap-2">
+
         <main>
         <Router>
           <AppRoutes />
@@ -17,7 +17,7 @@ function App() {
      
       {/* <Button ><Link to="/Preferences">Preferences</Link></Button> */}
       
-    </div>
+
     </>
   )
 }

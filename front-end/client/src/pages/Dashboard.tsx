@@ -3,6 +3,7 @@ import "../style/Dashboard.css";
 import { useNavigate } from 'react-router-dom'
 import { Button } from "@/components/ui/button"
 import { Link, BrowserRouter as Router } from 'react-router-dom';
+import Navbar from '@/components/common/navbar';
 
 
 
@@ -71,6 +72,7 @@ const Dashboard: React.FC = () => {
   if (error) {
     return (
       <div className="dashboard-container">
+        
         <div className="error-message">
           <p>{error}</p>
           <button onClick={() => window.location.href = '/'}>Go to Login</button>
@@ -81,12 +83,8 @@ const Dashboard: React.FC = () => {
 
   return (
     <div className="dashboard-container">
-      <header className="dashboard-header">
-        <h1>Dashboard</h1>
-        <Button variant="destructive" className="logout-button" onClick={handleLogout}>
-          Logout
-        </Button>
-      </header>
+        <Navbar/>
+     
 
       <main className="dashboard-content">
         {user && (
@@ -128,6 +126,19 @@ const Dashboard: React.FC = () => {
             </ul>
           </div>
         </div>
+        <div className="bg-white rounded-lg shadow-md p-6">
+            <h3 className="text-lg font-semibold text-gray-800 mb-3">Monitored Destination</h3>
+            <ul className="space-y-2">
+              <li className="text-gray-600">View your profile</li>
+              <li>
+                <Link to="/view">
+                  <Button variant="outline" className="mt-2">
+                    View All
+                  </Button>
+                </Link>
+              </li>
+            </ul>
+          </div>
       </main>
     </div>
   );
