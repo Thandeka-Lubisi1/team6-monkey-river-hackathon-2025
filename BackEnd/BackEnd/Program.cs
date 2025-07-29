@@ -66,6 +66,7 @@ var mongoSettings = new MongoDbSettings
     DatabaseName = Environment.GetEnvironmentVariable("MONGO_DATABASE_NAME")
                    ?? builder.Configuration["MongoDbSettings:DatabaseName"]
 };
+
 builder.Services.AddSingleton(mongoSettings);
 builder.Services.AddSingleton<MongoDbContext>();
 
