@@ -42,3 +42,7 @@ It is built with **ASP.NET Core**, integrated with **MongoDB Atlas**, and secure
 ```bash
 git clone https://github.com/Thandeka-Lubisi1/team6-monkey-river-hackathon-2025.git
 cd team6-monkey-river-hackathon-2025/backend
+
+2️⃣ **cd to front-end/client**
+
+run : npm run dev
