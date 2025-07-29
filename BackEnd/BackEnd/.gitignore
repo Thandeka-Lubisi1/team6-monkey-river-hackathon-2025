@@ -1,0 +1,48 @@
+# Environment files
+.env
+.env.local
+.env.production
+.env.staging
+
+# Build results
+bin/
+obj/
+out/
+
+# User-specific files
+*.user
+*.userosscache
+*.sln.docstates
+
+# Visual Studio
+.vs/
+*.rsuser
+
+# JetBrains Rider
+.idea/
+
+# User secrets (if you use them)
+UserSecrets/
+
+# Logs
+*.log
+logs/
+
+# Database files (if using local db files)
+*.db
+*.sqlite
+*.sqlite3
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+ehthumbs.db
+
+# Node modules (if you add any frontend)
+node_modules/
+
+# Temporary files
+*.tmp
+*.temp
