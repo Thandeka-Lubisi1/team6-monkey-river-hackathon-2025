@@ -62,9 +62,14 @@ function AuthToggle() {
     if (!validate()) return;
 
     if (isRegister) {
+
+
+      try {
+
+      
     console.log( "Registering", form);
        // Registration request
-        const response = await fetch('http://localhost:5000/api/auth/register', {
+        const response = await fetch('http://localhost:5279/api/v1/Auth/register', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -85,10 +90,15 @@ function AuthToggle() {
           alert("Registration successful! Please check your email to verify your account.");
         } else {
           // Handle server validation errors
-          setErrors({
-            general: data.message || "Registration failed"
-          });
+          // setErrors({
+            // general: data.message || "Registration failed"
+            console.log("registration failed", data)
+          // });
         }
+
+      } catch (e) {
+        console.log("error", e)
+      }
 
     } else {
     console.log("Logging in", form);
