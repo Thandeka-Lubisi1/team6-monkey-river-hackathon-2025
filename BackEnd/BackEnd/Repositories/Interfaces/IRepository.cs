@@ -1,4 +1,6 @@
-﻿namespace BackEnd.Repositories.Interfaces
+﻿using MongoDB.Driver;
+
+namespace BackEnd.Repositories.Interfaces
 {
     public interface IRepository<T> where T : class
     {
@@ -7,5 +9,8 @@
         Task AddAsync(T entity);
         Task UpdateAsync(string id, T entity);
         Task DeleteAsync(string id);
+
+        Task<T> FindOneAsync(FilterDefinition<T> filter);
+        Task UpdateOneAsync(FilterDefinition<T> filter, UpdateDefinition<T> update);
     }
 }

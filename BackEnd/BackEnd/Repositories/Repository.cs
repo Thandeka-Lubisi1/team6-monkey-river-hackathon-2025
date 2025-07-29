@@ -40,5 +40,15 @@ namespace BackEnd.Repositories
             var filter = Builders<T>.Filter.Eq("_id", ObjectId.Parse(id));
             await _collection.DeleteOneAsync(filter);
         }
+
+        public async Task<T> FindOneAsync(FilterDefinition<T> filter)
+        {
+            return await _collection.Find(filter).FirstOrDefaultAsync();
+        }
+
+        public async Task UpdateOneAsync(FilterDefinition<T> filter, UpdateDefinition<T> update)
+        {
+            await _collection.UpdateOneAsync(filter, update);
+        }
     }
 }

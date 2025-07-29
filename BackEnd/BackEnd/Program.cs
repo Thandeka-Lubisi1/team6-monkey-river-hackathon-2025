@@ -48,9 +48,12 @@ builder.Services.AddSwaggerGen(c =>
         });
 });
 
+
 builder.Services.Configure<MongoDbSettings>(builder.Configuration.GetSection("MongoDbSettings"));
 builder.Services.AddSingleton<MongoDbContext>();
 builder.Services.AddScoped<JwtService>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<ITravelAlertService, TravelAlertService>();
 
 var jwtKey = Environment.GetEnvironmentVariable("JWT_SECRET_KEY") 
             ?? builder.Configuration["Jwt:Key"];
