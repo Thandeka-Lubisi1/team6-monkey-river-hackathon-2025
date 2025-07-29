@@ -26,5 +26,10 @@ namespace BackEnd.Models
                 return false;
             }
         }
+
+        public IMongoCollection<User> Users()
+        {
+            return _database.GetCollection<User>("users");
+        }
     }
 }
